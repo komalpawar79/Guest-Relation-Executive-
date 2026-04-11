@@ -37,11 +37,12 @@ export const addClient = asyncHandler(async (req, res, next) => {
 });
 
 export const getClients = asyncHandler(async (req, res, next) => {
-  const { startDate, endDate, visitDate, source, closingManager, sourcingManager, attended, page, limit } = req.query;
+  const { startDate, endDate, visitDate, source, closingManager, sourcingManager, gre, attended, page, limit } = req.query;
 
   const filters = {
     closingManager,
     sourcingManager,
+    gre,
     source,
     attended: attended === 'true' ? true : attended === 'false' ? false : undefined,
     page: parseInt(page) || 1,
@@ -51,11 +52,12 @@ export const getClients = asyncHandler(async (req, res, next) => {
   // Handle date filtering
   if (visitDate) {
     // If visitDate is provided, filter for that specific date
-    const selectedDate = new Date(visitDate);
+    // Parse date as YYYY-MM-DD format (local date, not UTC)
+    const [year, month, day] = visitDate.split('-');
+    const selectedDate = new Date(year, month - 1, day, 0, 0, 0, 0); // Local date
+    const endOfDay = new Date(year, month - 1, day, 23, 59, 59, 999); // End of same day
+    
     filters.startDate = selectedDate.toISOString();
-    // Set endDate to end of the same day
-    const endOfDay = new Date(selectedDate);
-    endOfDay.setHours(23, 59, 59, 999);
     filters.endDate = endOfDay.toISOString();
   } else {
     // Use startDate and endDate if provided

@@ -1,9 +1,17 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 export const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
+
+  // Use useEffect to handle navigation
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/login');
+    }
+  }, [user, loading, navigate]);
 
   if (loading) {
     return (
@@ -16,8 +24,8 @@ export const ProtectedRoute = ({ children }) => {
     );
   }
 
+  // If user is not authenticated, don't render anything
   if (!user) {
-    navigate('/login');
     return null;
   }
 

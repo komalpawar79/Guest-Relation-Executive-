@@ -8,9 +8,15 @@ export const FilterSection = ({ onFilterChange }) => {
     endDate: '',
     closingManager: '',
     sourcingManager: '',
+    gre: '',
     attended: '',
   });
   const [isExporting, setIsExporting] = useState(false);
+
+  // Manager lists
+  const closingManagers = ['Pooja Tikude', 'Manasi Mehta', 'Ayush Jain', 'Nitesh Sharma', 'Prashant'];
+  const sourcingManagers = ['Akash Chavan', 'Nitesh Thakur'];
+  const greStaff = ['Komal Pawar'];
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -57,6 +63,7 @@ export const FilterSection = ({ onFilterChange }) => {
       endDate: '',
       closingManager: '',
       sourcingManager: '',
+      gre: '',
       attended: '',
     });
     onFilterChange({
@@ -64,6 +71,7 @@ export const FilterSection = ({ onFilterChange }) => {
       endDate: '',
       closingManager: '',
       sourcingManager: '',
+      gre: '',
       attended: '',
     });
   };
@@ -85,7 +93,7 @@ export const FilterSection = ({ onFilterChange }) => {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
         <div>
           <label className="label text-sm">Start Date</label>
           <input
@@ -110,26 +118,53 @@ export const FilterSection = ({ onFilterChange }) => {
 
         <div>
           <label className="label text-sm">Closing Manager</label>
-          <input
-            type="text"
+          <select
             name="closingManager"
             value={filters.closingManager}
             onChange={handleFilterChange}
             className="input text-sm"
-            placeholder="Manager name"
-          />
+          >
+            <option value="">All</option>
+            {closingManagers.map((manager) => (
+              <option key={manager} value={manager}>
+                {manager}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>
           <label className="label text-sm">Sourcing Manager</label>
-          <input
-            type="text"
+          <select
             name="sourcingManager"
             value={filters.sourcingManager}
             onChange={handleFilterChange}
             className="input text-sm"
-            placeholder="Manager name"
-          />
+          >
+            <option value="">All</option>
+            {sourcingManagers.map((manager) => (
+              <option key={manager} value={manager}>
+                {manager}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="label text-sm">GRE Staff</label>
+          <select
+            name="gre"
+            value={filters.gre}
+            onChange={handleFilterChange}
+            className="input text-sm"
+          >
+            <option value="">All</option>
+            {greStaff.map((staff) => (
+              <option key={staff} value={staff}>
+                {staff}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>
