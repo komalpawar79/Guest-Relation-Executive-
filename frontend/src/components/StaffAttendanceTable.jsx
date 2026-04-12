@@ -313,8 +313,8 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
                             checkInTime: e.target.value,
                           }))
                         }
-                        disabled={editData.status === 'Absent'}
-                        placeholder={editData.status === 'Absent' ? 'Absent' : ''}
+                        disabled={editData.status === 'Absent' || editData.status === 'Week Off'}
+                        placeholder={editData.status === 'Absent' || editData.status === 'Week Off' ? editData.status : ''}
                         className="px-2 py-1 border border-gray-300 rounded text-xs disabled:bg-gray-100 disabled:cursor-not-allowed"
                       />
                     </td>
@@ -333,6 +333,7 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
                         <option value="Absent">Absent</option>
                         <option value="Late">Late</option>
                         <option value="Left Early">Left Early</option>
+                        <option value="Week Off">Week Off</option>
                       </select>
                     </td>
                     <td className="px-4 py-3 flex gap-2">
