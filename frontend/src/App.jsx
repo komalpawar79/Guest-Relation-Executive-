@@ -1,10 +1,34 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoginPage, RegisterPage } from './pages/AuthPages';
 import { Dashboard } from './pages/Dashboard';
 import './index.css';
-import { Component } from 'react';
+import { Component, useEffect } from 'react';
+
+const RootRedirect = () => {
+  const { user, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading) {
+      if (user) {
+        navigate('/dashboard', { replace: true });
+      } else {
+        navigate('/login', { replace: true });
+      }
+    }
+  }, [user, loading, navigate]);
+
+  return (
+    <div className="flex items-center justify-center h-screen bg-background">
+      <div className="text-center">
+        <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <p className="mt-4 text-textSecondary">Loading...</p>
+      </div>
+    </div>
+  );
+};
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -51,7 +75,7 @@ class ErrorBoundary extends Component {
                 </ProtectedRoute>
               }
             />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<RootRedirect />} />
           </Routes>
         </AuthProvider>
       </Router>
