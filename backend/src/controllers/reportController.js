@@ -207,7 +207,7 @@ export const getYearlyReport = asyncHandler(async (req, res, next) => {
 });
 
 export const getManagerAnalytics = asyncHandler(async (req, res, next) => {
-  const { startDate, endDate } = req.query;
+  const { startDate, endDate, closingManager, sourcingManager, gre, attended } = req.query;
 
   const matchStage = {};
 
@@ -235,6 +235,29 @@ export const getManagerAnalytics = asyncHandler(async (req, res, next) => {
     const [endYear, endMonth, endDay] = endDate.split('-');
     const endDateObj = new Date(parseInt(endYear), parseInt(endMonth) - 1, parseInt(endDay), 23, 59, 59, 999);
     matchStage.visitDate.$lte = endDateObj;
+  }
+
+  // Add filter for closingManager
+  if (closingManager) {
+    matchStage.closingManager = closingManager;
+  }
+
+  // Add filter for sourcingManager
+  if (sourcingManager) {
+    matchStage.sourcingManager = sourcingManager;
+  }
+
+  // Add filter for GRE staff
+  if (gre) {
+    matchStage.$or = [
+      { remark: { $regex: gre, $options: 'i' } },
+      { 'attendanceNotes': { $regex: gre, $options: 'i' } }
+    ];
+  }
+
+  // Add filter for attendance status
+  if (attended) {
+    matchStage.attended = attended === 'true';
   }
 
   const closingManagerStats = await Client.aggregate([
@@ -291,7 +314,7 @@ export const getManagerAnalytics = asyncHandler(async (req, res, next) => {
 });
 
 export const getAnalytics = asyncHandler(async (req, res, next) => {
-  const { startDate, endDate } = req.query;
+  const { startDate, endDate, closingManager, sourcingManager, gre, attended } = req.query;
 
   const matchStage = {};
 
@@ -321,6 +344,29 @@ export const getAnalytics = asyncHandler(async (req, res, next) => {
     const [endYear, endMonth, endDay] = endDate.split('-');
     const endDateObj = new Date(parseInt(endYear), parseInt(endMonth) - 1, parseInt(endDay), 23, 59, 59, 999);
     matchStage.visitDate.$lte = endDateObj;
+  }
+
+  // Add filter for closingManager
+  if (closingManager) {
+    matchStage.closingManager = closingManager;
+  }
+
+  // Add filter for sourcingManager
+  if (sourcingManager) {
+    matchStage.sourcingManager = sourcingManager;
+  }
+
+  // Add filter for GRE staff (stored in field, needs to match)
+  if (gre) {
+    matchStage.$or = [
+      { remark: { $regex: gre, $options: 'i' } },
+      { 'attendanceNotes': { $regex: gre, $options: 'i' } }
+    ];
+  }
+
+  // Add filter for attendance status
+  if (attended) {
+    matchStage.attended = attended === 'true';
   }
 
   const analytics = await Client.aggregate([
