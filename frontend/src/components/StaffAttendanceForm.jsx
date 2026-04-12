@@ -46,8 +46,8 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
       return;
     }
 
-    // Check-in time is required only if status is not Absent
-    if (formData.status !== 'Absent' && !formData.checkInTime) {
+    // Check-in time is required only if status is not Absent or Week Off
+    if (formData.status !== 'Absent' && formData.status !== 'Week Off' && !formData.checkInTime) {
       setError('Check-in time is required');
       return;
     }
@@ -55,10 +55,10 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
     try {
       setLoading(true);
       
-      // If status is Absent, set checkInTime to 'Absent'
+      // If status is Absent or Week Off, set checkInTime to status
       const submitData = {
         ...formData,
-        checkInTime: formData.status === 'Absent' ? 'Absent' : formData.checkInTime,
+        checkInTime: (formData.status === 'Absent' || formData.status === 'Week Off') ? formData.status : formData.checkInTime,
       };
       
       const response = await attendanceAPI.addAttendance(submitData);
@@ -175,13 +175,14 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
               <option value="Absent">Absent</option>
               <option value="Late">Late</option>
               <option value="Left Early">Left Early</option>
+              <option value="Week Off">Week Off</option>
             </select>
           </div>
 
           {/* Check-in Time */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Check-in Time {formData.status !== 'Absent' && <span className="text-red-500">*</span>}
+              Check-in Time {formData.status !== 'Absent' && formData.status !== 'Week Off' && <span className="text-red-500">*</span>}
             </label>
             <input
               type="text"

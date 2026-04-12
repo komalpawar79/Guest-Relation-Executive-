@@ -140,10 +140,10 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
   // Handle edit save
   const handleEditSave = async (id) => {
     try {
-      // If status is Absent, set checkInTime to 'Absent'
+      // If status is Absent or Week Off, set checkInTime to status
       const updateData = {
         ...editData,
-        checkInTime: editData.status === 'Absent' ? 'Absent' : editData.checkInTime,
+        checkInTime: (editData.status === 'Absent' || editData.status === 'Week Off') ? editData.status : editData.checkInTime,
       };
       
       const response = await attendanceAPI.updateAttendance(id, updateData);
@@ -229,6 +229,7 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
           <option value="Absent">Absent</option>
           <option value="Late">Late</option>
           <option value="Left Early">Left Early</option>
+          <option value="Week Off">Week Off</option>
         </select>
 
         <input

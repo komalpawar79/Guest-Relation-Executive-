@@ -29,7 +29,7 @@ const managerAttendanceSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Present', 'Absent', 'Late', 'Left Early'],
+      enum: ['Present', 'Absent', 'Late', 'Left Early', 'Week Off'],
       default: 'Present',
       index: true,
     },
