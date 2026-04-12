@@ -211,27 +211,29 @@ export const getManagerAnalytics = asyncHandler(async (req, res, next) => {
 
   const matchStage = {};
 
-  // Smart date filtering
+  // Smart date filtering with proper local date parsing
   if (startDate) {
     matchStage.visitDate = {};
-    matchStage.visitDate.$gte = new Date(startDate);
+    const [startYear, startMonth, startDay] = startDate.split('-');
+    const startDateObj = new Date(parseInt(startYear), parseInt(startMonth) - 1, parseInt(startDay), 0, 0, 0, 0);
+    matchStage.visitDate.$gte = startDateObj;
     
     if (endDate) {
       // If both dates provided: from startDate to endDate
-      const endDateObj = new Date(endDate);
-      endDateObj.setHours(23, 59, 59, 999); // End of day
+      const [endYear, endMonth, endDay] = endDate.split('-');
+      const endDateObj = new Date(parseInt(endYear), parseInt(endMonth) - 1, parseInt(endDay), 23, 59, 59, 999);
       matchStage.visitDate.$lte = endDateObj;
     } else {
       // If only startDate provided: from startDate until today
       const todayEnd = new Date();
-      todayEnd.setHours(23, 59, 59, 999); // End of today
+      todayEnd.setHours(23, 59, 59, 999);
       matchStage.visitDate.$lte = todayEnd;
     }
   } else if (endDate) {
     // If only endDate provided: from beginning until endDate
     matchStage.visitDate = {};
-    const endDateObj = new Date(endDate);
-    endDateObj.setHours(23, 59, 59, 999);
+    const [endYear, endMonth, endDay] = endDate.split('-');
+    const endDateObj = new Date(parseInt(endYear), parseInt(endMonth) - 1, parseInt(endDay), 23, 59, 59, 999);
     matchStage.visitDate.$lte = endDateObj;
   }
 
@@ -293,27 +295,31 @@ export const getAnalytics = asyncHandler(async (req, res, next) => {
 
   const matchStage = {};
 
-  // Smart date filtering
+  // Smart date filtering with proper local date parsing
   if (startDate) {
     matchStage.visitDate = {};
-    matchStage.visitDate.$gte = new Date(startDate);
+    
+    // Parse startDate as local date (YYYY-MM-DD format)
+    const [startYear, startMonth, startDay] = startDate.split('-');
+    const startDateObj = new Date(parseInt(startYear), parseInt(startMonth) - 1, parseInt(startDay), 0, 0, 0, 0);
+    matchStage.visitDate.$gte = startDateObj;
     
     if (endDate) {
-      // If both dates provided: from startDate to endDate
-      const endDateObj = new Date(endDate);
-      endDateObj.setHours(23, 59, 59, 999); // End of day
+      // If both dates provided: from startDate to endDate (end of day)
+      const [endYear, endMonth, endDay] = endDate.split('-');
+      const endDateObj = new Date(parseInt(endYear), parseInt(endMonth) - 1, parseInt(endDay), 23, 59, 59, 999);
       matchStage.visitDate.$lte = endDateObj;
     } else {
-      // If only startDate provided: from startDate until today
+      // If only startDate provided: should not happen now (frontend sets both), but handle it
       const todayEnd = new Date();
-      todayEnd.setHours(23, 59, 59, 999); // End of today
+      todayEnd.setHours(23, 59, 59, 999);
       matchStage.visitDate.$lte = todayEnd;
     }
   } else if (endDate) {
     // If only endDate provided: from beginning until endDate
     matchStage.visitDate = {};
-    const endDateObj = new Date(endDate);
-    endDateObj.setHours(23, 59, 59, 999);
+    const [endYear, endMonth, endDay] = endDate.split('-');
+    const endDateObj = new Date(parseInt(endYear), parseInt(endMonth) - 1, parseInt(endDay), 23, 59, 59, 999);
     matchStage.visitDate.$lte = endDateObj;
   }
 

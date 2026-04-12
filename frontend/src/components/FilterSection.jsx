@@ -20,7 +20,13 @@ export const FilterSection = ({ onFilterChange }) => {
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    const newFilters = { ...filters, [name]: value };
+    let newFilters = { ...filters, [name]: value };
+
+    // Smart date filtering: If only startDate is selected, set endDate = startDate (filter to just that day)
+    if (name === 'startDate' && value && !filters.endDate) {
+      newFilters.endDate = value;
+    }
+
     setFilters(newFilters);
 
     // Debounce the filter change
