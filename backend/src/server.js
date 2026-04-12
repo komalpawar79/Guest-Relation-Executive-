@@ -16,13 +16,30 @@ import attendanceRoutes from './routes/attendanceRoutes.js';
 
 dotenv.config();
 
+// Define allowed origins for CORS (handles both dev and production)
+const allowedOrigins = [
+  'http://localhost:5173',      // Development frontend
+  'http://localhost:5000',      // Development backend (for Socket.IO)
+  'https://gre-woad.vercel.app', // Production frontend
+  'https://gre-bxnz.onrender.com', // Production backend
+];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  credentials: true,
+};
+
 const app = express();
 const httpServer = createServer(app);
 const io = new SocketIOServer(httpServer, {
-  cors: {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-    methods: ['GET', 'POST'],
-  },
+  cors: corsOptions,
 });
 
 // Connect to MongoDB
@@ -30,7 +47,7 @@ await connectDB();
 
 // Middleware
 app.use(helmet());
-app.use(cors({ origin: process.env.CORS_ORIGIN || 'http://localhost:5173' }));
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
