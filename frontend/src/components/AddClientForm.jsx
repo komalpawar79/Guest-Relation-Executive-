@@ -179,6 +179,7 @@ export const AddClientForm = ({ onClientAdded, socket }) => {
               <option value="Reference">Reference</option>
               <option value="CRM">CRM</option>
               <option value="Channel Partner">Channel Partner</option>
+              <option value="Revisit">Revisit</option>
             </select>
           </div>
 

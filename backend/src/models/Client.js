@@ -29,7 +29,7 @@ const clientSchema = new mongoose.Schema(
     source: {
       type: String,
       required: [true, 'Please provide a client source'],
-      enum: ['Walking', 'Reference', 'CRM', 'Channel Partner'],
+      enum: ['Walking', 'Reference', 'CRM', 'Channel Partner', 'Revisit'],
       index: true,
     },
     sourcingManager: {

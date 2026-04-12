@@ -176,8 +176,10 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
           >
             <option value="">All Sources</option>
             <option value="Walking">Walking</option>
-            <option value="Channel Partner">Channel Partner</option>
+            <option value="Reference">Reference</option>
             <option value="CRM">CRM</option>
+            <option value="Channel Partner">Channel Partner</option>
+            <option value="Revisit">Revisit</option>
           </select>
         </div>
       </div>

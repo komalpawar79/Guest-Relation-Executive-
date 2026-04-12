@@ -185,6 +185,7 @@ export const EditClientModal = ({ client, isOpen, onClose, onSuccess }) => {
                   <option value="Reference">Reference</option>
                   <option value="CRM">CRM</option>
                   <option value="Channel Partner">Channel Partner</option>
+                  <option value="Revisit">Revisit</option>
                 </select>
               </div>
 
