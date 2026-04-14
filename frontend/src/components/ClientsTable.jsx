@@ -205,6 +205,9 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
                     Source
                   </th>
                   <th className="px-4 py-3 text-left text-sm font-semibold">
+                    Sourcing Mgr
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">
                     Closing Mgr
                   </th>
                   <th className="px-4 py-3 text-left text-sm font-semibold">
@@ -231,6 +234,7 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
                         {client.source || 'N/A'}
                       </span>
                     </td>
+                    <td className="px-4 py-3 text-sm">{client.sourcingManager || '-'}</td>
                     <td className="px-4 py-3 text-sm">{client.closingManager}</td>
                     <td className="px-4 py-3 text-sm max-w-xs">
                       {editingId === client._id ? (
