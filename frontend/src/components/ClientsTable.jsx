@@ -21,7 +21,7 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
 
   useEffect(() => {
     fetchClients();
-  }, [filters, refreshTrigger, dateFilter, sourceFilter]);
+  }, [filters, refreshTrigger, dateFilter, sourceFilter, pagination.currentPage]);
 
   useEffect(() => {
     if (!socket) return;
