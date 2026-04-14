@@ -361,7 +361,7 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
                       className={`px-4 py-3 font-semibold ${
                         record.status === 'Absent' 
                           ? 'text-gray-600' 
-                          : record.checkInTime >= '10:30' ? 'text-red-600' : 'text-gray-800'
+                          : record.checkInTime > '10:30' ? 'text-red-600' : 'text-gray-800'
                       }`}
                     >
                       {record.status === 'Absent' && !record.checkInTime ? 'Absent' : record.checkInTime}
