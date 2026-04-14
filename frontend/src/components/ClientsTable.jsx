@@ -22,8 +22,9 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
   });
 
   useEffect(() => {
+    setPagination({ currentPage: 1, pages: 1, total: 0 });
     fetchClients();
-  }, [filters, refreshTrigger, dateFilter, sourceFilter, closingManagerFilter, sourcingManagerFilter, pagination.currentPage]);
+  }, [filters, refreshTrigger, dateFilter, sourceFilter, closingManagerFilter, sourcingManagerFilter]);
 
   useEffect(() => {
     if (!socket) return;
@@ -69,12 +70,12 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
     };
   }, [socket]);
 
-  const fetchClients = async () => {
+  const fetchClients = async (pageNum = 1) => {
     setLoading(true);
     try {
       const queryParams = {
         ...filters,
-        page: pagination.currentPage,
+        page: pageNum,
         limit: 20,
       };
       if (dateFilter) {
@@ -356,10 +357,7 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
             <div className="flex gap-2">
               <button
                 onClick={() =>
-                  setPagination({
-                    ...pagination,
-                    currentPage: Math.max(1, pagination.currentPage - 1),
-                  })
+                  fetchClients(Math.max(1, pagination.currentPage - 1))
                 }
                 disabled={pagination.currentPage === 1}
                 className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
@@ -371,13 +369,12 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
               </span>
               <button
                 onClick={() =>
-                  setPagination({
-                    ...pagination,
-                    currentPage: Math.min(
+                  fetchClients(
+                    Math.min(
                       pagination.pages,
                       pagination.currentPage + 1
-                    ),
-                  })
+                    )
+                  )
                 }
                 disabled={pagination.currentPage === pagination.pages}
                 className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 disabled:opacity-50"
