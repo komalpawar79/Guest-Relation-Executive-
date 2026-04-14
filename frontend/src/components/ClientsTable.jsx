@@ -13,6 +13,8 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [dateFilter, setDateFilter] = useState('');
   const [sourceFilter, setSourceFilter] = useState('');
+  const [closingManagerFilter, setClosingManagerFilter] = useState('');
+  const [sourcingManagerFilter, setSourcingManagerFilter] = useState('');
   const [pagination, setPagination] = useState({
     currentPage: 1,
     pages: 1,
@@ -21,7 +23,7 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
 
   useEffect(() => {
     fetchClients();
-  }, [filters, refreshTrigger, dateFilter, sourceFilter, pagination.currentPage]);
+  }, [filters, refreshTrigger, dateFilter, sourceFilter, closingManagerFilter, sourcingManagerFilter, pagination.currentPage]);
 
   useEffect(() => {
     if (!socket) return;
@@ -80,6 +82,12 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
       }
       if (sourceFilter) {
         queryParams.source = sourceFilter;
+      }
+      if (closingManagerFilter) {
+        queryParams.closingManager = closingManagerFilter;
+      }
+      if (sourcingManagerFilter) {
+        queryParams.sourcingManager = sourcingManagerFilter;
       }
 
       const response = await clientAPI.getClients(queryParams);
@@ -149,8 +157,8 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
     <div className="card overflow-hidden">
       <h2 className="text-xl font-bold mb-4 text-textPrimary">Clients List</h2>
 
-      {/* Date & Source Filter */}
-      <div className="mb-4 pb-4 border-b border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Date & Source & Managers Filter */}
+      <div className="mb-4 pb-4 border-b border-gray-200 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
           <label className="block text-sm font-medium text-textPrimary mb-2">Filter by Date</label>
           <input
@@ -180,6 +188,40 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
             <option value="CRM">CRM</option>
             <option value="Channel Partner">Channel Partner</option>
             <option value="Revisit">Revisit</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-textPrimary mb-2">Filter by Closing Mgr</label>
+          <select
+            value={closingManagerFilter}
+            onChange={(e) => {
+              setClosingManagerFilter(e.target.value);
+              setPagination({ ...pagination, currentPage: 1 });
+            }}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+          >
+            <option value="">All Closing Mgrs</option>
+            {[...new Set(clients.map(c => c.closingManager).filter(Boolean))].sort().map(manager => (
+              <option key={manager} value={manager}>{manager}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-textPrimary mb-2">Filter by Sourcing Mgr</label>
+          <select
+            value={sourcingManagerFilter}
+            onChange={(e) => {
+              setSourcingManagerFilter(e.target.value);
+              setPagination({ ...pagination, currentPage: 1 });
+            }}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+          >
+            <option value="">All Sourcing Mgrs</option>
+            {[...new Set(clients.map(c => c.sourcingManager).filter(Boolean))].sort().map(manager => (
+              <option key={manager} value={manager}>{manager}</option>
+            ))}
           </select>
         </div>
       </div>
