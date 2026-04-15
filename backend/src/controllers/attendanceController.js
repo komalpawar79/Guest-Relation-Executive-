@@ -9,8 +9,8 @@ export const addAttendance = asyncHandler(async (req, res, next) => {
     return next(new ErrorHandler('Please provide all required fields', 400));
   }
 
-  // Check-in time is required only if status is not Absent or Week Off
-  if (status !== 'Absent' && status !== 'Week Off' && !checkInTime) {
+  // Check-in time is required only if status is not Absent, Week Off, or Leave
+  if (status !== 'Absent' && status !== 'Week Off' && status !== 'Leave' && !checkInTime) {
     return next(new ErrorHandler('Check-in time is required', 400));
   }
 

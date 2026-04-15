@@ -46,8 +46,8 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
       return;
     }
 
-    // Check-in time is required only if status is not Absent or Week Off
-    if (formData.status !== 'Absent' && formData.status !== 'Week Off' && !formData.checkInTime) {
+    // Check-in time is required only if status is not Absent, Week Off, or Leave
+    if (formData.status !== 'Absent' && formData.status !== 'Week Off' && formData.status !== 'Leave' && !formData.checkInTime) {
       setError('Check-in time is required');
       return;
     }
@@ -55,10 +55,10 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
     try {
       setLoading(true);
       
-      // If status is Absent or Week Off, set checkInTime to status
+      // If status is Absent, Week Off, or Leave, set checkInTime to status
       const submitData = {
         ...formData,
-        checkInTime: (formData.status === 'Absent' || formData.status === 'Week Off') ? formData.status : formData.checkInTime,
+        checkInTime: (formData.status === 'Absent' || formData.status === 'Week Off' || formData.status === 'Leave') ? formData.status : formData.checkInTime,
       };
       
       const response = await attendanceAPI.addAttendance(submitData);
@@ -176,13 +176,14 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
               <option value="Late">Late</option>
               <option value="Left Early">Left Early</option>
               <option value="Week Off">Week Off</option>
+              <option value="Leave">Leave</option>
             </select>
           </div>
 
           {/* Check-in Time */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Check-in Time {formData.status !== 'Absent' && formData.status !== 'Week Off' && <span className="text-red-500">*</span>}
+              Check-in Time {formData.status !== 'Absent' && formData.status !== 'Week Off' && formData.status !== 'Leave' && <span className="text-red-500">*</span>}
             </label>
             <input
               type="text"
@@ -190,11 +191,11 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
               placeholder="e.g., 09:30 AM"
               value={formData.checkInTime}
               onChange={handleChange}
-              disabled={formData.status === 'Absent'}
+              disabled={formData.status === 'Absent' || formData.status === 'Leave'}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
-            {formData.status === 'Absent' && (
-              <p className="text-xs text-gray-500 mt-1">Not required for Absent status</p>
+            {(formData.status === 'Absent' || formData.status === 'Leave') && (
+              <p className="text-xs text-gray-500 mt-1">Not required for {formData.status} status</p>
             )}
           </div>
         </div>
