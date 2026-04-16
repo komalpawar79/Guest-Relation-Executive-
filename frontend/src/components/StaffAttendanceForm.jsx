@@ -17,6 +17,7 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
     date: new Date().toISOString().split('T')[0],
     checkInTime: '',
     status: 'Present',
+    remarks: '',
   });
 
   const handleChange = (e) => {
@@ -198,6 +199,21 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
               <p className="text-xs text-gray-500 mt-1">Not required for {formData.status} status</p>
             )}
           </div>
+
+          {/* Reason/Remarks */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Reason (Optional)
+            </label>
+            <input
+              type="text"
+              name="remarks"
+              placeholder="e.g., leave, coming late, doctor appointment"
+              value={formData.remarks}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
         </div>
 
         {/* Submit Button */}
@@ -211,6 +227,7 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
                 date: new Date().toISOString().split('T')[0],
                 checkInTime: '',
                 status: 'Present',
+                remarks: '',
               });
               setError('');
               setSuccessMsg('');

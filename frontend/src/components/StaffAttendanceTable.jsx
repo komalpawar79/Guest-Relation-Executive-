@@ -186,6 +186,13 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
     }
   };
 
+  // Helper function to check if remarks contain red flag keywords
+  const hasRedFlagReason = (remarks) => {
+    if (!remarks) return false;
+    const redFlags = ['leave', 'late', 'coming late', 'doctor', 'emergency', 'urgent', 'sick'];
+    return redFlags.some(flag => remarks.toLowerCase().includes(flag));
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">Attendance Records</h2>
@@ -264,6 +271,7 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
               <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Date</th>
               <th className="px-4 py-2">Check-in</th>
+              <th className="px-4 py-2">Reason</th>
               <th className="px-4 py-2">Status</th>
               <th className="px-4 py-2">Actions</th>
             </tr>
@@ -271,13 +279,13 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="5" className="px-4 py-3 text-center text-gray-500">
+                <td colSpan="6" className="px-4 py-3 text-center text-gray-500">
                   Loading...
                 </td>
               </tr>
             ) : records.length === 0 ? (
               <tr>
-                <td colSpan="5" className="px-4 py-3 text-center text-gray-500">
+                <td colSpan="6" className="px-4 py-3 text-center text-gray-500">
                   No records found
                 </td>
               </tr>
@@ -332,6 +340,20 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
                       />
                     </td>
                     <td className="px-4 py-3">
+                      <input
+                        type="text"
+                        value={editData.remarks || ''}
+                        onChange={(e) =>
+                          setEditData((prev) => ({
+                            ...prev,
+                            remarks: e.target.value,
+                          }))
+                        }
+                        placeholder="e.g., leave, coming late"
+                        className="px-2 py-1 border border-gray-300 rounded text-xs"
+                      />
+                    </td>
+                    <td className="px-4 py-3">
                       <select
                         value={editData.status}
                         onChange={(e) =>
@@ -374,10 +396,13 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
                       className={`px-4 py-3 font-semibold ${
                         record.status === 'Absent' 
                           ? 'text-gray-600' 
-                          : isLateTime(record.checkInTime) ? 'text-red-600' : 'text-gray-800'
+                          : (isLateTime(record.checkInTime) || hasRedFlagReason(record.remarks)) ? 'text-red-600' : 'text-gray-800'
                       }`}
                     >
                       {record.status === 'Absent' && !record.checkInTime ? 'Absent' : record.checkInTime}
+                    </td>
+                    <td className="px-4 py-3 text-gray-700">
+                      {record.remarks || '-'}
                     </td>
                     <td className="px-4 py-3">
                       <span
