@@ -140,10 +140,9 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
   // Handle edit save
   const handleEditSave = async (id) => {
     try {
-      // If status is Absent or Week Off, set checkInTime to status
+      // Submit data as is - don't auto-fill checkInTime
       const updateData = {
         ...editData,
-        checkInTime: (editData.status === 'Absent' || editData.status === 'Week Off') ? editData.status : editData.checkInTime,
       };
       
       const response = await attendanceAPI.updateAttendance(id, updateData);
@@ -278,7 +277,7 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
             <tr>
               <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Date</th>
-              <th className="px-4 py-2">Check-in / Reason</th>
+              <th className="px-4 py-2">Check-in</th>
               <th className="px-4 py-2">Status</th>
               <th className="px-4 py-2">Actions</th>
             </tr>
@@ -341,7 +340,7 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
                             checkInTime: e.target.value,
                           }))
                         }
-                        placeholder={editData.status === 'Absent' || editData.status === 'Week Off' ? `Reason for ${editData.status}` : 'e.g., 09:30 or coming late'}
+                        placeholder=\"e.g., 09:30 or leave reason\"
                         className="px-2 py-1 border border-gray-300 rounded text-xs"
                       />
                     </td>

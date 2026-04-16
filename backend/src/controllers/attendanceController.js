@@ -22,7 +22,7 @@ export const addAttendance = asyncHandler(async (req, res, next) => {
     managerName,
     managerType,
     date: new Date(date),
-    checkInTime,
+    checkInTime: checkInTime || '',
     checkOutTime: checkOutTime || '',
     status: status || 'Present',
     remarks: remarks || '',

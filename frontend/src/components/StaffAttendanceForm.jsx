@@ -55,10 +55,9 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
     try {
       setLoading(true);
       
-      // If status is Absent, Week Off, or Leave, set checkInTime to status
+      // Submit data as is - don't auto-fill checkInTime
       const submitData = {
         ...formData,
-        checkInTime: (formData.status === 'Absent' || formData.status === 'Week Off' || formData.status === 'Leave') ? formData.status : formData.checkInTime,
       };
       
       const response = await attendanceAPI.addAttendance(submitData);
@@ -180,15 +179,15 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
             </select>
           </div>
 
-          {/* Check-in Time / Reason */}
+          {/* Remarks */}
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Check-in Time or Reason {formData.status !== 'Absent' && formData.status !== 'Week Off' && formData.status !== 'Leave' && <span className="text-red-500">*</span>}
+              Details {formData.status !== 'Absent' && formData.status !== 'Week Off' && formData.status !== 'Leave' && <span className="text-red-500">*</span>}
             </label>
             <input
               type="text"
               name="checkInTime"
-              placeholder="e.g., 09:30 AM or 'coming late' or 'leave reason' or 'doctor appointment'"
+              placeholder="e.g., 09:30 or leave reason or doctor appointment"
               value={formData.checkInTime}
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
