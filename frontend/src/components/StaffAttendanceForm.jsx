@@ -188,16 +188,16 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
             <input
               type="text"
               name="checkInTime"
-              placeholder="e.g., 09:30 AM or 'coming late' or 'leave' or 'doctor appointment'"
+              placeholder="e.g., 09:30 AM or 'coming late' or 'leave reason' or 'doctor appointment'"
               value={formData.checkInTime}
               onChange={handleChange}
-              disabled={formData.status === 'Absent' || formData.status === 'Leave'}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <p className="text-xs text-gray-500 mt-1">Enter time (e.g., 09:30) or reason (e.g., coming late, leave, doctor appointment)</p>
-            {(formData.status === 'Absent' || formData.status === 'Leave') && (
-              <p className="text-xs text-gray-500 mt-1">Not required for {formData.status} status</p>
-            )}
+            <p className="text-xs text-gray-500 mt-1">
+              {formData.status === 'Absent' || formData.status === 'Week Off' || formData.status === 'Leave'
+                ? `Optional - Enter reason for ${formData.status} status`
+                : 'Enter time (e.g., 09:30) or reason (e.g., coming late, doctor appointment)'}
+            </p>
           </div>
         </div>
 

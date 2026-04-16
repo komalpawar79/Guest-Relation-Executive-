@@ -341,9 +341,8 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
                             checkInTime: e.target.value,
                           }))
                         }
-                        disabled={editData.status === 'Absent' || editData.status === 'Week Off'}
-                        placeholder={editData.status === 'Absent' || editData.status === 'Week Off' ? editData.status : 'e.g., 09:30 or coming late'}
-                        className="px-2 py-1 border border-gray-300 rounded text-xs disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        placeholder={editData.status === 'Absent' || editData.status === 'Week Off' ? `Reason for ${editData.status}` : 'e.g., 09:30 or coming late'}
+                        className="px-2 py-1 border border-gray-300 rounded text-xs"
                       />
                     </td>
                     <td className="px-4 py-3">
