@@ -385,9 +385,7 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
                     <td className="px-4 py-3">{record.date.split('T')[0]}</td>
                     <td
                       className={`px-4 py-3 font-semibold ${
-                        record.status === 'Absent' 
-                          ? 'text-gray-600' 
-                          : shouldShowRed(record.checkInTime) ? 'text-red-600' : 'text-gray-800'
+                        shouldShowRed(record.checkInTime) ? 'text-red-600' : 'text-gray-800'
                       }`}
                     >
                       {record.status === 'Absent' && !record.checkInTime ? 'Absent' : record.checkInTime}
