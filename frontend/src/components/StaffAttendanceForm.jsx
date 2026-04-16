@@ -193,11 +193,6 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
               onChange={handleChange}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <p className="text-xs text-gray-500 mt-1">
-              {formData.status === 'Absent' || formData.status === 'Week Off' || formData.status === 'Leave'
-                ? `Optional - Enter reason for ${formData.status} status`
-                : 'Enter time (e.g., 09:30) or reason (e.g., coming late, doctor appointment)'}
-            </p>
           </div>
         </div>
 
