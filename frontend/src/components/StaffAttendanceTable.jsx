@@ -173,24 +173,32 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
     return [];
   };
 
-  // Helper function to compare times correctly (HH:MM format)
-  const isLateTime = (timeStr) => {
-    if (!timeStr) return false;
+  // Helper function to check if time/reason should be displayed in red
+  const shouldShowRed = (checkInTime) => {
+    if (!checkInTime) return false;
+    
+    // Check for red flag keywords
+    const redFlags = ['leave', 'late', 'coming late', 'doctor', 'emergency', 'urgent', 'sick', 'absent', 'week off'];
+    if (redFlags.some(flag => checkInTime.toLowerCase().includes(flag))) {
+      return true;
+    }
+    
+    // Try to parse as time and check if after 10:30
     try {
-      const [hours, minutes] = timeStr.split(':').map(Number);
-      const checkInMinutes = hours * 60 + minutes;
-      const cutoffMinutes = 10 * 60 + 30; // 10:30
-      return checkInMinutes > cutoffMinutes;
+      const timeRegex = /^(\d{1,2}):(\d{2})/;
+      const match = checkInTime.match(timeRegex);
+      if (match) {
+        const hours = parseInt(match[1]);
+        const minutes = parseInt(match[2]);
+        const checkInMinutes = hours * 60 + minutes;
+        const cutoffMinutes = 10 * 60 + 30; // 10:30
+        return checkInMinutes > cutoffMinutes;
+      }
     } catch {
       return false;
     }
-  };
-
-  // Helper function to check if remarks contain red flag keywords
-  const hasRedFlagReason = (remarks) => {
-    if (!remarks) return false;
-    const redFlags = ['leave', 'late', 'coming late', 'doctor', 'emergency', 'urgent', 'sick'];
-    return redFlags.some(flag => remarks.toLowerCase().includes(flag));
+    
+    return false;
   };
 
   return (
@@ -270,8 +278,7 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
             <tr>
               <th className="px-4 py-2">Name</th>
               <th className="px-4 py-2">Date</th>
-              <th className="px-4 py-2">Check-in</th>
-              <th className="px-4 py-2">Reason</th>
+              <th className="px-4 py-2">Check-in / Reason</th>
               <th className="px-4 py-2">Status</th>
               <th className="px-4 py-2">Actions</th>
             </tr>
@@ -279,13 +286,13 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="6" className="px-4 py-3 text-center text-gray-500">
+                <td colSpan="5" className="px-4 py-3 text-center text-gray-500">
                   Loading...
                 </td>
               </tr>
             ) : records.length === 0 ? (
               <tr>
-                <td colSpan="6" className="px-4 py-3 text-center text-gray-500">
+                <td colSpan="5" className="px-4 py-3 text-center text-gray-500">
                   No records found
                 </td>
               </tr>
@@ -335,22 +342,8 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
                           }))
                         }
                         disabled={editData.status === 'Absent' || editData.status === 'Week Off'}
-                        placeholder={editData.status === 'Absent' || editData.status === 'Week Off' ? editData.status : ''}
+                        placeholder={editData.status === 'Absent' || editData.status === 'Week Off' ? editData.status : 'e.g., 09:30 or coming late'}
                         className="px-2 py-1 border border-gray-300 rounded text-xs disabled:bg-gray-100 disabled:cursor-not-allowed"
-                      />
-                    </td>
-                    <td className="px-4 py-3">
-                      <input
-                        type="text"
-                        value={editData.remarks || ''}
-                        onChange={(e) =>
-                          setEditData((prev) => ({
-                            ...prev,
-                            remarks: e.target.value,
-                          }))
-                        }
-                        placeholder="e.g., leave, coming late"
-                        className="px-2 py-1 border border-gray-300 rounded text-xs"
                       />
                     </td>
                     <td className="px-4 py-3">
@@ -396,13 +389,10 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
                       className={`px-4 py-3 font-semibold ${
                         record.status === 'Absent' 
                           ? 'text-gray-600' 
-                          : (isLateTime(record.checkInTime) || hasRedFlagReason(record.remarks)) ? 'text-red-600' : 'text-gray-800'
+                          : shouldShowRed(record.checkInTime) ? 'text-red-600' : 'text-gray-800'
                       }`}
                     >
                       {record.status === 'Absent' && !record.checkInTime ? 'Absent' : record.checkInTime}
-                    </td>
-                    <td className="px-4 py-3 text-gray-700">
-                      {record.remarks || '-'}
                     </td>
                     <td className="px-4 py-3">
                       <span

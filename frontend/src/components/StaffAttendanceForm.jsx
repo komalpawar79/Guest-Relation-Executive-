@@ -17,7 +17,6 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
     date: new Date().toISOString().split('T')[0],
     checkInTime: '',
     status: 'Present',
-    remarks: '',
   });
 
   const handleChange = (e) => {
@@ -181,38 +180,24 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
             </select>
           </div>
 
-          {/* Check-in Time */}
-          <div>
+          {/* Check-in Time / Reason */}
+          <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Check-in Time {formData.status !== 'Absent' && formData.status !== 'Week Off' && formData.status !== 'Leave' && <span className="text-red-500">*</span>}
+              Check-in Time or Reason {formData.status !== 'Absent' && formData.status !== 'Week Off' && formData.status !== 'Leave' && <span className="text-red-500">*</span>}
             </label>
             <input
               type="text"
               name="checkInTime"
-              placeholder="e.g., 09:30 AM"
+              placeholder="e.g., 09:30 AM or 'coming late' or 'leave' or 'doctor appointment'"
               value={formData.checkInTime}
               onChange={handleChange}
               disabled={formData.status === 'Absent' || formData.status === 'Leave'}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
             />
+            <p className="text-xs text-gray-500 mt-1">Enter time (e.g., 09:30) or reason (e.g., coming late, leave, doctor appointment)</p>
             {(formData.status === 'Absent' || formData.status === 'Leave') && (
               <p className="text-xs text-gray-500 mt-1">Not required for {formData.status} status</p>
             )}
-          </div>
-
-          {/* Reason/Remarks */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Reason (Optional)
-            </label>
-            <input
-              type="text"
-              name="remarks"
-              placeholder="e.g., leave, coming late, doctor appointment"
-              value={formData.remarks}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
           </div>
         </div>
 
@@ -227,7 +212,6 @@ const StaffAttendanceForm = ({ onAttendanceAdded }) => {
                 date: new Date().toISOString().split('T')[0],
                 checkInTime: '',
                 status: 'Present',
-                remarks: '',
               });
               setError('');
               setSuccessMsg('');
