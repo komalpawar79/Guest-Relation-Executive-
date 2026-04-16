@@ -340,7 +340,7 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
                             checkInTime: e.target.value,
                           }))
                         }
-                        placeholder=\"e.g., 09:30 or leave reason\"
+                        placeholder="e.g., 09:30 or leave reason"
                         className="px-2 py-1 border border-gray-300 rounded text-xs"
                       />
                     </td>
