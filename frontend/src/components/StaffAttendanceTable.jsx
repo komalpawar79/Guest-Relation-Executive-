@@ -173,6 +173,19 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
     return [];
   };
 
+  // Helper function to compare times correctly (HH:MM format)
+  const isLateTime = (timeStr) => {
+    if (!timeStr) return false;
+    try {
+      const [hours, minutes] = timeStr.split(':').map(Number);
+      const checkInMinutes = hours * 60 + minutes;
+      const cutoffMinutes = 10 * 60 + 30; // 10:30
+      return checkInMinutes > cutoffMinutes;
+    } catch {
+      return false;
+    }
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">Attendance Records</h2>
@@ -361,7 +374,7 @@ const StaffAttendanceTable = ({ refreshTrigger, socket }) => {
                       className={`px-4 py-3 font-semibold ${
                         record.status === 'Absent' 
                           ? 'text-gray-600' 
-                          : record.checkInTime > '10:30' ? 'text-red-600' : 'text-gray-800'
+                          : isLateTime(record.checkInTime) ? 'text-red-600' : 'text-gray-800'
                       }`}
                     >
                       {record.status === 'Absent' && !record.checkInTime ? 'Absent' : record.checkInTime}
