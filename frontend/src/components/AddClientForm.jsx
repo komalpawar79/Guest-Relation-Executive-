@@ -11,6 +11,7 @@ export const AddClientForm = ({ onClientAdded, socket }) => {
     source: '',
     sourcingManager: '',
     remark: '',
+    formNo: '',
   });
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -76,6 +77,7 @@ export const AddClientForm = ({ onClientAdded, socket }) => {
         source: '',
         sourcingManager: '',
         remark: '',
+        formNo: '',
       });
 
       if (onClientAdded) {
@@ -207,6 +209,18 @@ export const AddClientForm = ({ onClientAdded, socket }) => {
               onChange={handleChange}
               className="input"
               placeholder="Add any remarks"
+            />
+          </div>
+
+          <div>
+            <label className="label">Form No (Optional)</label>
+            <input
+              type="text"
+              name="formNo"
+              value={formData.formNo}
+              onChange={handleChange}
+              className="input"
+              placeholder="Enter form number"
             />
           </div>
         </div>

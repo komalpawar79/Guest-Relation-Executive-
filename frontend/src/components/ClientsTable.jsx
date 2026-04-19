@@ -242,6 +242,9 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
                     Phone
                   </th>
                   <th className="px-4 py-3 text-left text-sm font-semibold">
+                    Form No
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold">
                     Date
                   </th>
                   <th className="px-4 py-3 text-left text-sm font-semibold">
@@ -269,6 +272,7 @@ export const ClientsTable = ({ filters, socket, refreshTrigger }) => {
                   <tr key={client._id} className="border-b hover:bg-gray-50">
                     <td className="px-4 py-3 font-medium">{client.clientName}</td>
                     <td className="px-4 py-3 text-sm">{client.phoneNumber}</td>
+                    <td className="px-4 py-3 text-sm">{client.formNo || '-'}</td>
                     <td className="px-4 py-3 text-sm">
                       {format(new Date(client.visitDate), 'dd MMM yyyy')}
                     </td>

@@ -11,6 +11,7 @@ export const EditClientModal = ({ client, isOpen, onClose, onSuccess }) => {
     source: client?.source || '',
     sourcingManager: client?.sourcingManager || '',
     remark: client?.remark || '',
+    formNo: client?.formNo || '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -168,6 +169,7 @@ export const EditClientModal = ({ client, isOpen, onClose, onSuccess }) => {
                   <option value="Manasi Mehta">Manasi Mehta</option>
                   <option value="Ayush Jain">Ayush Jain</option>
                   <option value="Nitesh Sharma">Nitesh Sharma</option>
+                  <option value="Jagdish Gharge">Jagdish Gharge</option>
                 </select>
               </div>
 
@@ -215,6 +217,18 @@ export const EditClientModal = ({ client, isOpen, onClose, onSuccess }) => {
                   onChange={handleChange}
                   className="input"
                   placeholder="Add any remarks"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="label">Form No (Optional)</label>
+                <input
+                  type="text"
+                  name="formNo"
+                  value={formData.formNo}
+                  onChange={handleChange}
+                  className="input"
+                  placeholder="Enter form number"
                 />
               </div>
             </div>

@@ -44,6 +44,11 @@ const clientSchema = new mongoose.Schema(
       maxlength: [500, 'Remark cannot exceed 500 characters'],
       default: '',
     },
+    formNo: {
+      type: String,
+      trim: true,
+      default: '',
+    },
     attended: {
       type: Boolean,
       default: false,
