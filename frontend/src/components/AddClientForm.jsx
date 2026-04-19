@@ -162,6 +162,7 @@ export const AddClientForm = ({ onClientAdded, socket }) => {
               <option value="Manasi Mehta">Manasi Mehta</option>
               <option value="Ayush Jain">Ayush Jain</option>
               <option value="Nitesh Sharma">Nitesh Sharma</option>
+              <option value="Jagdish Gharge">Jagdish Gharge</option>
             </select>
           </div>
 
